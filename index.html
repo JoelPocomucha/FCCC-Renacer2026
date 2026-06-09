@@ -79,8 +79,8 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .btn-out{background:none;border:1px solid var(--bg4);color:var(--txt3);font-size:10px;padding:4px 8px;border-radius:6px;cursor:pointer;font-family:inherit}
 
 /* ─── FORM ─── */
-#wrap-form{flex:1;overflow-y:auto;display:none}
-#s-form{padding:16px;display:flex;flex-direction:column;gap:14px}
+#wrap-form{flex:1;overflow-y:auto;display:none;display:none}
+#s-form{padding:16px;display:flex;flex-direction:column;gap:14px;min-height:calc(100vh - 57px)}
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .stat-box{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:10px 8px;text-align:center}
 .stat-num{font-family:'Bebas Neue',cursive;font-size:26px;line-height:1}
@@ -166,9 +166,11 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .nav-tab.active .nav-indicator{opacity:1}
 
 /* ─── FOOTER ZYNEXALL ─── */
-.zynexall-footer{text-align:center;padding:16px 0 24px;font-size:10px;color:var(--txt3)}
+.zynexall-footer{text-align:center;padding:10px 0 8px;font-size:10px;color:var(--txt3);border-top:0.5px solid var(--bg4);margin-top:auto;background:var(--bg)}
 .zynexall-footer a{color:var(--mag2);text-decoration:none;font-weight:600}
 .zynexall-footer a:hover{text-decoration:underline}
+.screen-footer{text-align:center;padding:10px 16px 20px;font-size:10px;color:var(--txt3);border-top:0.5px solid var(--bg4);background:var(--bg);margin-top:16px}
+.screen-footer a{color:var(--mag2);text-decoration:none;font-weight:600}
 
 /* ─── TOAST ─── */
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--mag);color:var(--txt);padding:10px 20px;border-radius:10px;font-size:12px;font-weight:500;opacity:0;transition:all .35s;z-index:999;white-space:nowrap;pointer-events:none}
@@ -294,7 +296,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
         <div class="fld"><label>Referente / Contacto</label><input id="f-ref" type="text" placeholder="Nombre del responsable"></div>
         <button class="btn-reg" onclick="registerGroup()">+ REGISTRAR GRUPO</button>
       </div>
-      <div class="zynexall-footer">Implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
+      <div class="screen-footer">Implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
     </div>
   </div>
 
@@ -305,7 +307,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
       <span class="col-count cc-m" id="badge-w">0 grupos</span>
     </div>
     <div id="zone-waiting"></div>
-    <div class="zynexall-footer">Implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
+    <div class="screen-footer">Implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
   </div></div>
 
   <!-- GESTIONA: Ya participó -->
@@ -315,7 +317,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
       <span class="col-count cc-gr" id="badge-d">0 grupos</span>
     </div>
     <div id="zone-done"></div>
-    <div class="zynexall-footer">Implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
+    <div class="screen-footer">Implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
   </div></div>
 
   <!-- ADMIN PANEL -->
@@ -345,8 +347,13 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
         <div class="log-entry" style="color:var(--txt3)">Sin actividad registrada aún...</div>
       </div>
     </div>
-    <div class="zynexall-footer">Administrado e implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
+    <div class="screen-footer">Administrado e implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
   </div></div>
+
+  <!-- ZYNEXALL STICKY FOOTER -->
+  <div id="zy-bar" style="display:none;background:var(--bg2);border-top:0.5px solid var(--bg4);padding:5px 0;text-align:center;font-size:10px;color:var(--txt3);flex-shrink:0">
+    Implementado por <a href="https://zynexall.com" target="_blank" style="color:var(--mag2);text-decoration:none;font-weight:600">Zynexall</a>
+  </div>
 
   <!-- BOTTOM NAV (Gestiona) -->
   <div class="bottom-nav" id="bottom-nav">
@@ -549,6 +556,7 @@ function login(r) {
   const av = document.getElementById('hdr-av'), rl = document.getElementById('hdr-role');
   ['wrap-form','wrap-waiting','wrap-done','wrap-admin'].forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('bottom-nav').style.display = 'none';
+  document.getElementById('zy-bar').style.display = 'block';
 
   if (r === 1) {
     av.className = 'av av1'; av.textContent = 'R1'; rl.textContent = 'Registra';
@@ -571,6 +579,7 @@ function logout() {
   stopPolling();
   document.getElementById('s-login').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
+  document.getElementById('zy-bar').style.display = 'none';
 }
 
 /* ═══ REGISTRA ═══ */
