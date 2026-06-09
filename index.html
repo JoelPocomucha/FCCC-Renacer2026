@@ -388,12 +388,12 @@ const ADMIN_PASS = 'Zynexall2026';
 
 /* ═══ ESTADO LOCAL ═══ */
 let role = 0, groups = [], dragSrc = null, activeTab = 'waiting';
-// Unique ID per browser TAB (not per device) - each tab = independent user
-const TAB_KEY = 'cap_tab_id';
-let CLIENT_ID = sessionStorage.getItem(TAB_KEY);
+// Unique ID per DEVICE - same phone always = same user, even if opens multiple tabs
+const DEVICE_KEY = 'cap_device_id';
+let CLIENT_ID = localStorage.getItem(DEVICE_KEY);
 if (!CLIENT_ID) {
-  CLIENT_ID = 'tab_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2,4);
-  sessionStorage.setItem(TAB_KEY, CLIENT_ID);
+  CLIENT_ID = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2,4);
+  localStorage.setItem(DEVICE_KEY, CLIENT_ID);
 }
 let activeUsers = {};
 let fbConnected = false, fbLastEtag = null, pollInterval = null;
