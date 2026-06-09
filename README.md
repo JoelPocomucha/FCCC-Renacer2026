@@ -1,33 +1,58 @@
 # 🪘 Caporales Centralistas · Registro de Grupos
+**Inauguración de Trajes · 13·06·2026**
+Desarrollado e implementado por [Zynexall](https://zynexall.com)
 
-App móvil para el registro y gestión de grupos durante la **Inauguración de Trajes · 13·06·2026**.
+---
 
-## 🚀 Uso en GitHub Pages
+## 🔥 Configuración Firebase — sincronización para hasta 15 personas
 
-1. Sube `index.html` a un repositorio en GitHub
-2. Ve a **Settings → Pages → Source → main branch**
-3. Accede desde el celular con la URL generada
+### Paso 1 — Crear proyecto Firebase
+1. Ve a [console.firebase.google.com](https://console.firebase.google.com)
+2. **"Agregar proyecto"** → nombre: `caporales-centralistas` → Crear
+3. Desactiva Google Analytics → **Crear proyecto**
+
+### Paso 2 — Realtime Database
+1. Menú izquierdo → **Realtime Database** → **Crear base de datos**
+2. **"Iniciar en modo de prueba"** → Habilitar
+3. Copia tu URL: `https://TU-PROYECTO-default-rtdb.firebaseio.com`
+
+### Paso 3 — Reglas de seguridad (importante para 15 usuarios)
+En Realtime Database → pestaña **Reglas**, pega esto:
+```json
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+```
+Clic en **Publicar**.
+
+### Paso 4 — Actualizar index.html
+Busca en el `<script>`:
+```js
+const FB_URL = 'https://caporales-centralistas-default-rtdb.firebaseio.com';
+```
+Reemplaza con tu URL real.
+
+---
 
 ## 👤 Roles
 
-| Persona | Acceso | Función |
-|---------|--------|---------|
-| **Persona 1** | Formulario | Registra nuevos grupos |
-| **Persona 2** | Listas | Gestiona orden y marca participación |
+| Rol | Acceso | Función |
+|-----|--------|---------|
+| **Registra** | Libre | Ingresa nuevos grupos |
+| **Gestiona** | Libre | Ordena cola y marca participación |
+| **Administrador** | Contraseña | Borrar datos, ver usuarios online |
 
-## 📱 Funciones
+**Contraseña admin:** `Zynexall2026`
 
-- ✅ Login por rol (sin contraseña)
-- ✅ Formulario con nombre, integrantes, categoría y referente
-- ✅ Cola ordenable con drag & drop
-- ✅ Primer grupo marcado "EN ESCENA" con botón "✓ Ya bailó"
-- ✅ Historial de grupos que ya participaron
-- ✅ Datos guardados en localStorage (persisten al recargar)
-- ✅ Funciona 100% offline, sin backend
+---
 
-## 🗂 Archivos
+## 📊 Capacidad
+- Hasta **15 usuarios simultáneos** (sincronización cada 1.5 segundos)
+- Panel admin muestra cuántas personas están conectadas en tiempo real
+- Log de actividad con últimas 50 acciones
 
-```
-index.html   ← Toda la app (logo incluido en base64)
-README.md    ← Este archivo
-```
+---
+*Implementado por [Zynexall](https://zynexall.com)*
