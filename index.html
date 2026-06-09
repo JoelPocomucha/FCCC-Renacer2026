@@ -79,8 +79,8 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .btn-out{background:none;border:1px solid var(--bg4);color:var(--txt3);font-size:10px;padding:4px 8px;border-radius:6px;cursor:pointer;font-family:inherit}
 
 /* ─── FORM ─── */
-#wrap-form{flex:1;overflow-y:auto;display:none;display:none}
-#s-form{padding:16px;display:flex;flex-direction:column;gap:14px;min-height:calc(100vh - 57px)}
+#wrap-form{flex:1;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
+#s-form{padding:16px;display:flex;flex-direction:column;gap:14px;padding-bottom:24px}
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .stat-box{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:10px 8px;text-align:center}
 .stat-num{font-family:'Bebas Neue',cursive;font-size:26px;line-height:1}
@@ -101,7 +101,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .btn-reg:active{transform:scale(.97)}
 
 /* ─── LISTAS ─── */
-#wrap-waiting,#wrap-done{flex:1;overflow-y:auto;display:none}
+#wrap-waiting,#wrap-done{flex:1;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
 #s-waiting,#s-done{padding:12px;display:flex;flex-direction:column;gap:10px}
 .col-hdr{display:flex;align-items:center;justify-content:space-between;padding:4px 0 8px}
 .col-hdr-title{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px}
@@ -136,7 +136,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .empty-box .eico{font-size:36px;opacity:.4}
 
 /* ─── ADMIN PANEL ─── */
-#wrap-admin{flex:1;overflow-y:auto;display:none}
+#wrap-admin{flex:1;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
 #s-admin{padding:16px;display:flex;flex-direction:column;gap:16px}
 .admin-header-box{background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(67,56,202,.1));border:1px solid rgba(99,102,241,.3);border-radius:16px;padding:20px;text-align:center}
 .admin-title{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:3px;color:#a5b4fc}
@@ -156,11 +156,11 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .log-entry:last-child{border:none}
 
 /* ─── NAV ─── */
-.bottom-nav{background:var(--bg2);border-top:1px solid var(--bg4);padding:8px 0 12px;flex-shrink:0;display:none}
+.bottom-nav{background:var(--bg2);border-top:1px solid var(--bg4);padding:8px 0 env(safe-area-inset-bottom,10px);flex-shrink:0;display:none;position:sticky;bottom:0;z-index:50;width:100%}
 .nav-tabs{display:flex}
-.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;border:none;background:none;color:var(--txt3)}
+.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;border:none;background:none;color:var(--txt3);min-height:56px;justify-content:center}
 .nav-tab.active{color:var(--mag2)}
-.nav-tab .tab-icon{font-size:20px}
+.nav-tab .tab-icon{font-size:24px;line-height:1}
 .nav-tab .tab-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
 .nav-indicator{width:4px;height:4px;border-radius:50%;background:var(--mag);margin:0 auto;opacity:0}
 .nav-tab.active .nav-indicator{opacity:1}
@@ -325,6 +325,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
     <div class="admin-header-box">
       <div class="admin-title">⚙️ Panel Administrador</div>
       <div class="admin-sub">Acceso exclusivo · Gestionado por Zynexall</div>
+      <div style="font-size:9px;color:var(--txt3);margin-top:4px;font-family:monospace">Sesión: <span id="session-id-display"></span></div>
     </div>
     <div class="admin-stats" style="grid-template-columns:repeat(4,1fr)">
       <div class="admin-stat"><div class="admin-stat-num" id="a-total">0</div><div class="admin-stat-lbl">Total</div></div>
@@ -359,10 +360,10 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
   <div class="bottom-nav" id="bottom-nav">
     <div class="nav-tabs">
       <button class="nav-tab active" id="tab-w" onclick="switchTab('waiting')">
-        <div class="tab-icon">🎪</div><div class="tab-label">Por participar</div><div class="nav-indicator"></div>
+        <div class="tab-icon">🎯</div><div class="tab-label">Por participar</div><div class="nav-indicator"></div>
       </button>
       <button class="nav-tab" id="tab-d" onclick="switchTab('done')">
-        <div class="tab-icon">🏆</div><div class="tab-label">Ya participó</div><div class="nav-indicator"></div>
+        <div class="tab-icon">✅</div><div class="tab-label">Ya participó</div><div class="nav-indicator"></div>
       </button>
     </div>
   </div>
@@ -387,7 +388,13 @@ const ADMIN_PASS = 'Zynexall2026';
 
 /* ═══ ESTADO LOCAL ═══ */
 let role = 0, groups = [], dragSrc = null, activeTab = 'waiting';
-const CLIENT_ID = 'user_' + Math.random().toString(36).substr(2,6);
+// Unique ID per browser TAB (not per device) - each tab = independent user
+const TAB_KEY = 'cap_tab_id';
+let CLIENT_ID = sessionStorage.getItem(TAB_KEY);
+if (!CLIENT_ID) {
+  CLIENT_ID = 'tab_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2,4);
+  sessionStorage.setItem(TAB_KEY, CLIENT_ID);
+}
 let activeUsers = {};
 let fbConnected = false, fbLastEtag = null, pollInterval = null;
 let activityLog = [];
@@ -558,17 +565,20 @@ function login(r) {
   document.getElementById('bottom-nav').style.display = 'none';
   document.getElementById('zy-bar').style.display = 'block';
 
+  const shortId = CLIENT_ID.substr(-4).toUpperCase();
   if (r === 1) {
-    av.className = 'av av1'; av.textContent = 'R1'; rl.textContent = 'Registra';
+    av.className = 'av av1'; av.textContent = 'R'; rl.textContent = 'Registra·'+shortId;
     document.getElementById('wrap-form').style.display = 'block';
   } else if (r === 2) {
-    av.className = 'av av2'; av.textContent = 'R2'; rl.textContent = 'Gestiona';
+    av.className = 'av av2'; av.textContent = 'G'; rl.textContent = 'Gestiona·'+shortId;
     document.getElementById('bottom-nav').style.display = 'block';
     switchTab('waiting');
   } else if (r === 3) {
     av.className = 'av av-admin'; av.textContent = 'ADM'; rl.textContent = 'Admin';
     document.getElementById('wrap-admin').style.display = 'block';
-    addLog('Admin ingresó al sistema');
+    addLog('Admin ingresó al sistema · sesión: ' + CLIENT_ID);
+    const sid = document.getElementById('session-id-display');
+    if(sid) sid.textContent = CLIENT_ID;
     updateAdminStats();
   }
   startPolling();
@@ -605,7 +615,7 @@ async function registerGroup() {
     doneAt: null
   });
   await fbSave();
-  addLog('Registró grupo: "' + name + '" (' + num + ' pers.)');
+  addLog('[' + CLIENT_ID.substr(0,8) + '] Registró: "' + name + '" (' + num + ' pers.)');
   ['f-name','f-num','f-ref'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-cat').value = '';
   updateCounters();
@@ -628,7 +638,7 @@ async function markDone(id) {
   g.status = 'done';
   g.doneAt = new Date().toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit'});
   await fbSave();
-  addLog('Grupo "' + g.name + '" marcado como participado');
+  addLog('[' + CLIENT_ID.substr(0,8) + '] Marcó: "' + g.name + '" como participado');
   renderLists();
   showToast('🎉 "' + g.name + '" ya participó!');
 }
