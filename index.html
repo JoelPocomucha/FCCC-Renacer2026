@@ -101,7 +101,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .btn-reg:active{transform:scale(.97)}
 
 /* ─── LISTAS ─── */
-#wrap-waiting,#wrap-done{flex:1;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
+#wrap-waiting,#wrap-done{flex:1;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;padding-bottom:130px}
 #s-waiting,#s-done{padding:12px;display:flex;flex-direction:column;gap:10px}
 .col-hdr{display:flex;align-items:center;justify-content:space-between;padding:4px 0 8px}
 .col-hdr-title{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px}
@@ -156,7 +156,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .log-entry:last-child{border:none}
 
 /* ─── NAV ─── */
-.bottom-nav{background:var(--bg2);border-top:1px solid var(--bg4);padding:8px 0 env(safe-area-inset-bottom,10px);flex-shrink:0;display:none;position:sticky;bottom:0;z-index:50;width:100%}
+.bottom-nav{background:var(--bg2);border-top:1px solid var(--bg4);padding:8px 0 env(safe-area-inset-bottom,10px);flex-shrink:0;display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;width:100%}
 .nav-tabs{display:flex}
 .nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;border:none;background:none;color:var(--txt3);min-height:56px;justify-content:center}
 .nav-tab.active{color:var(--mag2)}
@@ -352,7 +352,7 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
   </div></div>
 
   <!-- ZYNEXALL STICKY FOOTER -->
-  <div id="zy-bar" style="display:none;background:var(--bg2);border-top:0.5px solid var(--bg4);padding:5px 0;text-align:center;font-size:10px;color:var(--txt3);flex-shrink:0">
+  <div id="zy-bar" style="display:none;background:var(--bg2);border-top:0.5px solid var(--bg4);padding:5px 0;text-align:center;font-size:10px;color:var(--txt3);position:fixed;bottom:72px;left:0;right:0;z-index:199">
     Implementado por <a href="https://zynexall.com" target="_blank" style="color:var(--mag2);text-decoration:none;font-weight:600">Zynexall</a>
   </div>
 
