@@ -118,6 +118,10 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .gcard-num.first{background:var(--gold-dim);color:var(--gold2)}
 .gcard-name{font-size:14px;font-weight:600;color:var(--txt);flex:1}
 .drag-grip{color:var(--txt3);font-size:18px;padding:4px;cursor:grab;flex-shrink:0;user-select:none}
+.move-btns{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.btn-move{background:var(--bg4);border:none;color:var(--txt2);width:28px;height:26px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;transition:all .15s}
+.btn-move:active{background:var(--mag);color:#fff;transform:scale(.92)}
+.btn-move:disabled{opacity:.2;cursor:default}
 .gcard-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tag{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
 .tag-m{background:rgba(212,0,110,0.15);color:var(--mag2)}
@@ -622,6 +626,22 @@ async function registerGroup() {
   showToast('✅ "' + name + '" registrado!');
 }
 
+/* ═══ MOVER GRUPOS ═══ */
+async function moveGroup(id, dir) {
+  const waiting = groups.filter(g => g.status === 'waiting');
+  const idx = waiting.findIndex(g => String(g.id) === String(id));
+  if (idx === -1) return;
+  const swapIdx = dir === 'up' ? idx - 1 : idx + 1;
+  if (swapIdx < 0 || swapIdx >= waiting.length) return;
+  // Find positions in full groups array
+  const posA = groups.indexOf(waiting[idx]);
+  const posB = groups.indexOf(waiting[swapIdx]);
+  // Swap
+  [groups[posA], groups[posB]] = [groups[posB], groups[posA]];
+  await fbSave();
+  renderLists();
+}
+
 /* ═══ GESTIONA ═══ */
 function switchTab(tab) {
   activeTab = tab;
@@ -663,6 +683,10 @@ function renderLists() {
           <span class="drag-grip">⠿</span>
           <div class="gcard-num ${i===0?'first':''}">${i+1}</div>
           <div class="gcard-name">${g.name}</div>
+          <div class="move-btns">
+            <button class="btn-move" onclick="moveGroup('${g.id}','up')" ${i===0?'disabled':''} title="Subir">▲</button>
+            <button class="btn-move" onclick="moveGroup('${g.id}','down')" ${i===waiting.length-1?'disabled':''} title="Bajar">▼</button>
+          </div>
         </div>
         <div class="gcard-meta">
           <span class="tag tag-m">${g.cat}</span>
