@@ -108,6 +108,8 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
 .col-hdr-title.m{color:var(--mag2)}
 .col-hdr-title.gr{color:var(--green2)}
 .col-count{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+.btn-export{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;padding:7px 12px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(22,163,74,0.3)}
+.btn-export:active{transform:scale(.95)}
 .cc-m{background:rgba(212,0,110,0.15);color:var(--mag2)}
 .cc-gr{background:rgba(74,222,128,0.12);color:var(--green2)}
 .gcard{background:var(--bg2);border:1.5px solid var(--bg4);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;position:relative}
@@ -319,6 +321,9 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;f
     <div class="col-hdr">
       <div class="col-hdr-title gr">Ya participó</div>
       <span class="col-count cc-gr" id="badge-d">0 grupos</span>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:4px">
+      <button class="btn-export" onclick="exportExcel()">📥 Descargar Excel</button>
     </div>
     <div id="zone-done"></div>
     <div class="screen-footer">Implementado por <a href="https://zynexall.com" target="_blank">Zynexall</a></div>
