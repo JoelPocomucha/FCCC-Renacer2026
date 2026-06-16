@@ -750,6 +750,54 @@ function updateAdminStats() {
   document.getElementById('a-wait').textContent = groups.filter(g => g.status === 'waiting').length;
   document.getElementById('a-done').textContent = groups.filter(g => g.status === 'done').length;
 }
+
+/* ═══ EXPORTAR EXCEL ═══ */
+function exportExcel() {
+  const done = groups.filter(g => g.status === 'done');
+  if (!done.length) { showToast('⚠️ No hay grupos participantes aún'); return; }
+
+  const BOM = '\uFEFF';
+  const headers = ['#','Grupo','Categoría','Integrantes','Referente','Hora Registro','Hora Participó'];
+  
+  const rows = done.map((g, i) => [
+    i + 1,
+    '"' + String(g.name || '').replace(/"/g, '""') + '"',
+    '"' + String(g.cat || '').replace(/"/g, '""') + '"',
+    g.num || 0,
+    '"' + String(g.ref || '').replace(/"/g, '""') + '"',
+    '"' + String(g.regAt || '') + '"',
+    '"' + String(g.doneAt || '') + '"'
+  ]);
+
+  const totalPersonas = done.reduce((acc, g) => acc + (parseInt(g.num) || 0), 0);
+  rows.push(['','','','','','','']);
+  rows.push(['"TOTAL GRUPOS:"',done.length,'"TOTAL PERSONAS:"',totalPersonas,'','','']);
+
+  const csv = BOM + headers.join(',') + '\n' + rows.map(r => r.join(',')).join('\n');
+
+  const now = new Date();
+  const fecha = now.getDate() + '-' + (now.getMonth()+1) + '-' + now.getFullYear();
+  const hora = String(now.getHours()).padStart(2,'0') + 'h' + String(now.getMinutes()).padStart(2,'0');
+  const filename = 'Centralistas_' + fecha + '_' + hora + '.csv';
+
+  try {
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', filename);
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 1000);
+    showToast('📥 Descargando ' + done.length + ' grupos...');
+  } catch(e) {
+    showToast('❌ Error al descargar: ' + e.message);
+  }
+}
 </script>
 </body>
 </html>
